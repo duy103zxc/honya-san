@@ -9,19 +9,12 @@ pub enum Status {
     Discontinued,
 }
 
-#[derive(Debug)]
-pub struct Genre {
-    pub id: u64,
-    pub name: String,
-}
-
 pub struct DataSource {
     pub id: u64,
     pub name: String,
     pub slug: String,
     pub version: u64,
     pub base_url: String,
-    pub dev_name: String,
 }
 
 #[derive(Debug)]
@@ -31,14 +24,7 @@ pub struct Novel {
     // id of the novel
     pub id: u64,
     pub name: String,
-    pub cover: String,
-    pub status: Status,
-    pub alternate_names: Vec<String>,
-    pub authors: Vec<String>,
-    pub genres: Vec<Genre>,
     pub url: String,
-    pub rating: f32,
-    pub year: u16,
     pub chapter_count: u64,
 }
 
@@ -50,12 +36,3 @@ pub struct Chapter {
     pub content: String,
 }
 
-impl FromStr for Genre {
-    type Err = String;
-    fn from_str(s: &str) -> Result<Genre, Self::Err> {
-        Ok(Genre {
-            id: 0,
-            name: s.to_string(),
-        })
-    }
-}

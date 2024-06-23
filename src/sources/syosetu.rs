@@ -19,7 +19,6 @@ impl Source for Syosetu {
             slug: "syosetu".to_string(),
             version: 0,
             base_url: "https://ncode.syosetu.com/".to_string(),
-            dev_name: "none".to_string(),
         }
     }
 

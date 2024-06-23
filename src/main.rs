@@ -11,8 +11,5 @@ fn main() {
     let args: Vec<String> = env::args().collect();
     let novel_arg = &args[1];
 
-    // let vip_novel = sources::vipnovel::VipNovel {};
-    // for novel in vip_novel.home() {
-    //     println!("{:?}", &novel);
-    // }
+    let vip_novel = sources::vipnovel::VipNovel {};
 }

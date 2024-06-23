@@ -18,8 +18,7 @@ impl Source for VipNovel {
             name: "Vip Novel".to_string(),
             slug: "vip-novel".to_string(),
             version: 0,
-            base_url: "https://vipnovel.com/".to_string(),
-            dev_name: "ap-atul".to_string(),
+            base_url: "https://vipnovel.com/".to_string()
         }
     }
 
@@ -54,15 +53,8 @@ impl Source for VipNovel {
                 source_id: self.metadata().id,
                 id,
                 name: text::clean(&name),
-                cover: cover.to_string(),
-                status: Status::Unknown,
-                alternate_names: vec![],
-                authors: vec![],
-                genres: vec![],
                 url: url.to_string(),
-                rating: score,
-                year: 0,
-                chapter_count: latest_chapter,
+                chapter_count: latest_chapter
             });
         }
 
