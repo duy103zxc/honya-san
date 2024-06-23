@@ -1,15 +1,18 @@
-use sources::example::Example;
-
-use crate::interface::Source;
+// use sources::example::Example;
+// use crate::interface::Source;
 
 mod interface;
 mod model;
 mod sources;
 mod utils;
 
+use std::env;
 fn main() {
-    let vip_novel = sources::vipnovel::VipNovel {};
-    for novel in vip_novel.home() {
-        println!("{:?}", &novel);
-    }
+    let args: Vec<String> = env::args().collect();
+    let novel_arg = &args[1];
+
+    // let vip_novel = sources::vipnovel::VipNovel {};
+    // for novel in vip_novel.home() {
+    //     println!("{:?}", &novel);
+    // }
 }
