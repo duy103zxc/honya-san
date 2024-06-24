@@ -14,9 +14,6 @@ fn main() {
     let command = args[1].as_str();
     // let vip_novel = sources::vipnovel::VipNovel {};
     let syosetu = sources::syosetu::Syosetu {};
-    // for novel in vip_novel.home() {
-    //     println!("{:?}", &novel);
-    // }
     println!("{:?}", &syosetu.fetching(command));
     
 }

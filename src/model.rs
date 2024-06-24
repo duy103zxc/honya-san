@@ -1,14 +1,5 @@
-use std::fmt::{Display, Formatter};
-use std::str::FromStr;
 
 #[derive(Debug)]
-pub enum Status {
-    Unknown,
-    Ongoing,
-    Complete,
-    Discontinued,
-}
-
 pub struct DataSource {
     pub name: String,
     pub base_url: String,
@@ -21,13 +12,13 @@ pub struct Novel {
     // id of the novel
     pub id: u64,
     pub url: String,
-    pub chapters: Vec<Chapter>
+    pub chapters: Vec<String>
 
 }
 
 #[derive(Debug)]
 pub struct Chapter {
     pub name: String,
-    pub chapter_id: u64,    
+    pub chapter_id: String,    
 }
 
