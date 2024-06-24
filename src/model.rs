@@ -10,29 +10,24 @@ pub enum Status {
 }
 
 pub struct DataSource {
-    pub id: u64,
     pub name: String,
-    pub slug: String,
-    pub version: u64,
     pub base_url: String,
 }
 
 #[derive(Debug)]
 pub struct Novel {
-    // id of the source
-    pub source_id: u64,
+    pub name: String,
+    pub author: String,
     // id of the novel
     pub id: u64,
-    pub name: String,
     pub url: String,
-    pub chapter_count: u64,
+    pub chapters: Vec<Chapter>
+
 }
 
+#[derive(Debug)]
 pub struct Chapter {
-    pub id: u64,
-    pub novel_id: u64,
-    pub url: String,
     pub name: String,
-    pub content: String,
+    pub chapter_id: u64,    
 }
 

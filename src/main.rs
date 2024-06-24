@@ -1,15 +1,22 @@
+use sources::syosetu;
+
 // use sources::example::Example;
-// use crate::interface::Source;
+use crate::interface::Source;
+use std::env;
 
 mod interface;
 mod model;
 mod sources;
 mod utils;
 
-use std::env;
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let novel_arg = &args[1];
-
-    let vip_novel = sources::vipnovel::VipNovel {};
+    let command = args[1].as_str();
+    // let vip_novel = sources::vipnovel::VipNovel {};
+    let syosetu = sources::syosetu::Syosetu {};
+    // for novel in vip_novel.home() {
+    //     println!("{:?}", &novel);
+    // }
+    println!("{:?}", &syosetu.fetching(command));
+    
 }

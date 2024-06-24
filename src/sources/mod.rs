@@ -1,2 +1,1 @@
-pub mod example;
-pub mod vipnovel;
+pub mod syosetu;
