@@ -1,14 +1,10 @@
-// use std::borrow::Borrow;
 use std::fs::OpenOptions;
-// use std::str::FromStr;
-
 use scraper::{Html, Selector};
 use std::io::Write;
+use super::utils;
+// local crates
 use crate::interface::Source;
 use crate::model::*;
-// use crate::utils::file;
-use crate::utils::http;
-// use crate::utils::text;
 
 
 #[derive(Debug)]
@@ -25,7 +21,7 @@ impl Source for Syosetu {
     fn fetching(&self, novel_id: &str) -> Novel {
         // element selectors
         let base_url = self.metadata().base_url + novel_id;
-        let body = http::get_body_from_url(&base_url);
+        let body = utils::get_body_from_url(&base_url);
         let document = Html::parse_document(&body);
         let title_selector = Selector::parse("p.novel_title").unwrap();
         let author = Selector::parse("div.novel_writername").unwrap();
@@ -60,7 +56,7 @@ impl Source for Syosetu {
 
 fn fetch_chapter(chap_link: &str, current_index: u32) {
     // Fetch from the page
-    let body = http::get_body_from_url(&chap_link);
+    let body = utils::get_body_from_url(&chap_link);
     let document = Html::parse_document(&body);
     // Selector
     let title_selector = Selector::parse("p.novel_subtitle").unwrap();

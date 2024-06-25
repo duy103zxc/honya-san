@@ -1,4 +1,3 @@
-
 #[derive(Debug)]
 pub struct DataSource {
     pub name: String,
@@ -9,7 +8,6 @@ pub struct DataSource {
 pub struct Novel {
     pub name: String,
     pub author: String,
-    // id of the novel
     pub id: u64,
     pub url: String,
     pub chapters: Vec<String>
