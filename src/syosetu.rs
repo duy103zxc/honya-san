@@ -1,11 +1,9 @@
 use std::fs::OpenOptions;
 use scraper::{Html, Selector};
 use std::io::Write;
-use super::utils;
-// local crates
+use crate::utils;
+use crate::model::DataSource;
 use crate::interface::Source;
-use crate::model::*;
-
 
 #[derive(Debug)]
 pub struct Syosetu {}
@@ -18,7 +16,7 @@ impl Source for Syosetu {
         }
     }
 
-    fn fetching(&self, novel_id: &str) -> Novel {
+    fn fetching(&self, novel_id: &str)  {
         // element selectors
         let base_url = self.metadata().base_url + novel_id;
         let body = utils::get_body_from_url(&base_url);
@@ -42,13 +40,6 @@ impl Source for Syosetu {
             fetch_chapter(current_url.as_str(), current_index);
         }
         
-        Novel {
-            name: name,
-            author: author,
-            id: 0,
-            url: url,
-            chapters: vec![String::from("temp")]
-        }
     }
     
     

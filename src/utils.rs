@@ -4,8 +4,7 @@ use regex::Regex;
 use std::fs;
 
 pub fn get_body_from_url(url: &str) -> String {
-    
-let req_error_msg = format!("Failed to request resource :: {}", url);
+    let req_error_msg = format!("Failed to request resource :: {}", url);
     let response_parse_error = format!("Failed to parse the response of :: {}", url);
 
     let client = reqwest::blocking::Client::new();
