@@ -1,51 +1,32 @@
-use std::fs::OpenOptions;
 use scraper::{Html, Selector};
-use std::io::Write;
 use crate::utils;
-use crate::model::DataSource;
-use crate::interface::Source;
 
-#[derive(Debug)]
-pub struct Syosetu {}
-
-impl Source for Syosetu {
-    fn metadata(&self) -> DataSource {
-        DataSource {
-            name: String::from("Syosetu"),
-            base_url: "https://ncode.syosetu.com/".to_string(),
-        }
-    }
-
-    fn fetching(&self, novel_id: &str)  {
-        // element selectors
-        let base_url = self.metadata().base_url + novel_id;
-        let body = utils::get_body_from_url(&base_url);
-        let document = Html::parse_document(&body);
-        let title_selector = Selector::parse("p.novel_title").unwrap();
-        let author = Selector::parse("div.novel_writername").unwrap();
-        // List of chapters
-        let list_selector = Selector::parse("div.index_box").unwrap();
-        let id_selector = Selector::parse("a").unwrap();
-                
-        let name = document.select(&title_selector).next().unwrap().text().collect::<Vec<_>>().join("");
-        let author = document.select(&author).next().unwrap().text().collect::<Vec<_>>().join("");
-        let url = base_url;
-        let ul = document.select(&list_selector).next().unwrap();
-        let each_chap_url = ul.select(&id_selector).into_iter().map(|element| element.value().attr("href").unwrap()).collect::<Vec<_>>();
-        
-        let mut current_index: u32 = 0;
-        for chap in each_chap_url {
-            let current_url = self.metadata().base_url + chap;
-            current_index += 1;
-            fetch_chapter(current_url.as_str(), current_index);
-        }
-        
-    }
+pub fn fetch_novel(novel_id: &str)  {
+    // element selectors
+    let base_url = String::from("https://ncode.syosetu.com/");
+    let novel_url = base_url + novel_id;
+    let body = utils::get_body_from_url(&novel_url);
+    let document = Html::parse_document(&body);
+    // Metadata
+    let title_selector = Selector::parse("p.novel_title").unwrap();
+    let author = Selector::parse("div.novel_writername").unwrap();
+    // List of chapters
+    let list_selector = Selector::parse("div.index_box").unwrap();
+    let id_selector = Selector::parse("a").unwrap();
+            
+    let name = document.select(&title_selector).next().unwrap().text().collect::<Vec<_>>().join("");
+    let author = document.select(&author).next().unwrap().text().collect::<Vec<_>>().join("");
+    let ul = document.select(&list_selector).next().unwrap();
+    let each_chap_url = ul.select(&id_selector).into_iter().map(|element| element.value().attr("href").unwrap()).collect::<Vec<_>>();
     
+    for chap in each_chap_url {
+        let current_url =  format!("https://ncode.syosetu.com/{}", chap);
+        fetch_chapter(current_url.as_str());
+    }
     
 }
 
-fn fetch_chapter(chap_link: &str, current_index: u32) {
+fn fetch_chapter(chap_link: &str) -> (String, Vec<String>) {
     // Fetch from the page
     let body = utils::get_body_from_url(&chap_link);
     let document = Html::parse_document(&body);
@@ -60,13 +41,7 @@ fn fetch_chapter(chap_link: &str, current_index: u32) {
     let text = ul.select(&p_selector)
     .map(|txt| txt.html())
     .collect::<Vec<_>>();
-        
-    // Create file
-    let mut chapter_file = OpenOptions::new().write(true).append(true).create(true).open(format!("{}. {}.html", current_index, chap_name)).expect("Can't create file");
-    
-    for line in text {
-        writeln!(chapter_file, "{}", line).expect("Can't write to the chapter file");
-    }
-    
+     
+    (chap_name, text) 
 }
 
