@@ -28,7 +28,6 @@ pub fn gen_epub(book_id: &str, author: &str, title: &str) {
 
     let opf = import(book_id, format!("./{}/OEBPS", book_id).as_str());
     fs::write(format!("./{}/OEBPS/content.opf", book_id), file::gen_opf(book_id, title, author, opf.0, opf.1)).expect("Can't generate container file");   
-
 }
 
 fn import(book_id: &str, path: &str) -> (String, String) {
@@ -59,8 +58,8 @@ fn to_xhtml(content: Vec<String>, chap_title: &str) -> String {
     </head>
     <body class="bodymatter" epub:type="bodymatter">
 "##;
-  let chapter_title = format!("\n<h2>{}</h2>\n", chap_title).as_str();
-  let mut file: String = start.to_string() + chap_title;
+  let chapter_title = format!("\n<h2>{}</h2>\n", chap_title);
+  let mut file: String = start.to_string() + chapter_title.as_str();
 
   for line in content {
     file += &line;
