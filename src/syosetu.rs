@@ -26,7 +26,8 @@ impl Syosetu {
         let author = document.select(&author).next().unwrap().text().collect::<Vec<_>>().join("");
         let ul = document.select(&list_selector).next().unwrap();
         let each_chap_url = ul.select(&id_selector).into_iter().map(|element| element.value().attr("href").unwrap().to_string()).collect::<Vec<_>>();
-            Syosetu {
+        
+        Syosetu {
             title: title,
             author: author,
             chap_list: each_chap_url
