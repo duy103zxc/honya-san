@@ -1,19 +1,29 @@
 use std::fs::OpenOptions;
-use crate::syosetu::Syosetu;
 
-fn gen_thing(epub_gen: &mut epub_builder::EpubBuilder<epub_builder::ZipLibrary>, book_id: String) -> &mut epub_builder::EpubBuilder<epub_builder::ZipLibrary> {
-    let novel = Syosetu::fetch_novel(book_id.as_str()).chap_list;
+use crate::model::{Chapter, Novel};
+// use crate::syosetu::Syosetu;
+
+// Giữ nguyên, kiểm tra lại phần Import và phân vạch ID
+fn gen_content(
+    epub_gen: &mut epub_builder::EpubBuilder<epub_builder::ZipLibrary>, 
+    novel: Novel
+) -> &mut epub_builder::EpubBuilder<epub_builder::ZipLibrary> {
     let mut chap_num = 0;
-    for chapter in novel {
+    for chapter in novel.chapter_list {
         chap_num += 1;
-        epub_gen.add_content(epub_builder::EpubContent::new(format!("chapter_{}.xhtml", chap_num), import(chapter.as_str()).as_bytes())
-        .title(format!("Chapter {}", chap_num))
+        epub_gen.add_content(
+            epub_builder::EpubContent::new(
+                format!("chapter_{}.xhtml", chap_num), 
+                import(chapter).as_bytes()
+            )
+        .title(format!("chapter_{}", chap_num))
         .reftype(epub_builder::ReferenceType::Text)).expect("Nothing");
     }
     epub_gen
 }
 
-pub fn gen_epub(book_id: &str) -> epub_builder::Result<()> {
+// Thay Source từ Syosetu sang
+pub fn gen_epub(book: Novel) -> epub_builder::Result<()> {
     let coverpage = r##"
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
@@ -60,17 +70,20 @@ html {
     font-family: serif, sans-serif;
 }   
     "##;
-    let novel = Syosetu::fetch_novel(book_id);
-    
-    let output = OpenOptions::new().write(true).create(true).open(format!("{}.epub", novel.title))
-    .expect("Something");
 
+    // TODO
+    // Change to the GEN type for supporting multiple sources
+    // let novel = Syosetu::fetch_novel(book_id);
+    
+    // DO NOT CHANGE FROM HERE
+    let output = OpenOptions::new().write(true).create(true).open(format!("{}.epub", &book.title))
+    .expect("Something");
     // Create a new EpubBuilder using the zip library
     let mut binding = epub_builder::EpubBuilder::new(epub_builder::ZipLibrary::new()?)?;
     let gen_epub = binding
     // Set some metadata
-        .metadata("author", novel.author)?
-        .metadata("title", novel.title)?
+        .metadata("author", &book.author)?
+        .metadata("title", &book.title)?
     // Set epub version to 3.0
         .epub_version(epub_builder::EpubVersion::V30)
     // Set the stylesheet (create a "stylesheet.css" file in EPUB that is used by some generated files)
@@ -84,22 +97,28 @@ html {
         .add_content(epub_builder::EpubContent::new("title.xhtml", titlepage.as_bytes())
                      .title("Title")
                      .reftype(epub_builder::ReferenceType::TitlePage))?;
-        
-    let later_part = gen_thing(gen_epub, book_id.to_string());
+    // END    
+
+    // Fix it here
+    let generated_content = gen_content(gen_epub, book);
+    // End
+    
     // Generate a toc inside of the document, that will be part of the linear structure.
-    later_part.inline_toc().generate(output).expect("Error generating");
+    generated_content.inline_toc().generate(output).expect("Error generating");
     Ok(())
 }
 
 
 
-fn import(chap_id: &str) -> String {
-    let url = format!("https://ncode.syosetu.com/{}", chap_id);
-    let (title, content) = Syosetu::fetch_chapter(&url);
-    to_xhtml(content, title.as_str())
+// Trả ra XHTML dựa trên ID truyện.
+// TODO
+fn import(chap_content: Chapter) -> String {
+    to_xhtml(chap_content.content, &chap_content.name)
 }
 
 
+
+// Giữ nguyên
 fn to_xhtml(content: Vec<String>, chap_title: &str) -> String {
   // Start
   let start = r##"<?xml version="1.0" encoding="UTF-8"?>
