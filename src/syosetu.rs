@@ -8,7 +8,6 @@ pub struct Syosetu {
 }
 
 impl Syosetu {
-
     pub fn fetch_novel(novel_id: &str) -> Syosetu {
         // element selectors
         let base_url = String::from("https://ncode.syosetu.com/");

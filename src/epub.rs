@@ -60,10 +60,10 @@ html {
     font-family: serif, sans-serif;
 }   
     "##;
-    let output = OpenOptions::new().write(true).create(true).open("output.epub")
-    .expect("Something");
-
     let novel = Syosetu::fetch_novel(book_id);
+    
+    let output = OpenOptions::new().write(true).create(true).open(format!("{}.epub", novel.title))
+    .expect("Something");
 
     // Create a new EpubBuilder using the zip library
     let mut binding = epub_builder::EpubBuilder::new(epub_builder::ZipLibrary::new()?)?;
@@ -117,7 +117,6 @@ fn to_xhtml(content: Vec<String>, chap_title: &str) -> String {
 
   for line in content {
     file += &line;
-    file += "\n"
   }
   file += "\n</body>\n</html>";
   // End
