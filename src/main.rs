@@ -1,7 +1,7 @@
 use std::env;
 
 use interface::Source;
-use sources::{kakuyomu, syosetu};
+use sources::{hameln, kakuyomu, syosetu};
 
 // Mod
 mod utils;
@@ -19,12 +19,17 @@ fn main() {
         "syosetu" => {
             let syosetu_source = syosetu::Syosetu {};
             epub::gen_epub(syosetu_source.fetch_novel(id)).expect("Nothing");
-        }
+        },
         "kakuyomu" => {
             let kakuyomu_source = kakuyomu::Kakuyomu {};
             epub::gen_epub(kakuyomu_source.fetch_novel(id)).expect("Nothing");
    
-        }
+        },
+        "hameln" => {
+            let hameln_source = hameln::Hameln {};
+            epub::gen_epub(hameln_source.fetch_novel(id)).expect("Nothing");
+   
+        },
         _ => {
             println!("Something went wrong, please check the source name and source id before proceeding");
             std::process::exit(1);

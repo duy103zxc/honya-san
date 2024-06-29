@@ -14,9 +14,9 @@ fn gen_content(
         epub_gen.add_content(
             epub_builder::EpubContent::new(
                 format!("chapter_{}.xhtml", chap_num), 
-                import(chapter).as_bytes()
+                import(&chapter).as_bytes()
             )
-        .title(format!("chapter_{}", chap_num))
+        .title(format!("{}", &chapter.name))
         .reftype(epub_builder::ReferenceType::Text)).expect("Nothing");
     }
     epub_gen
@@ -112,14 +112,14 @@ html {
 
 // Trả ra XHTML dựa trên ID truyện.
 // TODO
-fn import(chap_content: Chapter) -> String {
-    to_xhtml(chap_content.content, &chap_content.name)
+fn import(chap_content: &Chapter) -> String {
+    to_xhtml(&chap_content.content, &chap_content.name)
 }
 
 
 
 // Giữ nguyên
-fn to_xhtml(content: Vec<String>, chap_title: &str) -> String {
+fn to_xhtml(content: &Vec<String>, chap_title: &str) -> String {
   // Start
   let start = r##"<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
