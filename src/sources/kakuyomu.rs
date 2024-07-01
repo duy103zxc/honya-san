@@ -19,11 +19,11 @@ impl Source for Kakuyomu {
         let body = utils::get_body_from_url(&novel_url);
         let document = Html::parse_document(&body);
         // Metadata
-        let title_selector = Selector::parse("h1 a").unwrap();
-        let author = Selector::parse("div.partialGiftWidgetActivityName a").unwrap();
+        let title_selector = Selector::parse("h1.Heading_heading__lQ85n > span:nth-child(1) > a:nth-child(1)").unwrap();
+        let author = Selector::parse(".Gap_size-3s__fjxCP > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > a:nth-child(1)").unwrap();
         // List of chapters
-        let list_selector = Selector::parse("div.NewBox_padding-px-m__OQCYI").unwrap();
-        let id_selector = Selector::parse("div.NewBox_box__45ont a.WorkTocSection_link__ocg9K").unwrap();
+        let list_selector = Selector::parse("div.NewBox_padding-px-m__OQCYI:nth-child(5)").unwrap();
+        let id_selector = Selector::parse("div.NewBox_padding-px-m__OQCYI:nth-child(3) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > a:nth-child(1)").unwrap();
                 
         let title = document.select(&title_selector).next().unwrap().text().collect::<Vec<_>>().join("");
         let author = document.select(&author).next().unwrap().text().collect::<Vec<_>>().join("");
@@ -45,9 +45,9 @@ impl Source for Kakuyomu {
         let body = utils::get_body_from_url(&base_link);
         let document = Html::parse_document(&body);
         // Selector
-        let title_selector = Selector::parse("p.contentMain-header-workTitle").unwrap();
-        let novel_selector = Selector::parse("div.widget-episode-inner").unwrap();
-        let p_selector = Selector::parse("p").unwrap();
+        let title_selector = Selector::parse(".widget-episodeTitle").unwrap();
+        let novel_selector: Selector = Selector::parse(".widget-episode-inner").unwrap();
+        let p_selector = Selector::parse("#p1").unwrap();
             
         let chap_name = document.select(&title_selector).next().unwrap().text().collect::<Vec<_>>().join("");    
         let ul = document.select(&novel_selector).next().unwrap();

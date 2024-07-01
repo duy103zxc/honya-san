@@ -70,10 +70,6 @@ html {
     font-family: serif, sans-serif;
 }   
     "##;
-
-    // TODO
-    // Change to the GEN type for supporting multiple sources
-    // let novel = Syosetu::fetch_novel(book_id);
     
     // DO NOT CHANGE FROM HERE
     let output = OpenOptions::new().write(true).create(true).open(format!("{}.epub", &book.title))
